@@ -1,6 +1,6 @@
 package com.jinnsoft.travelmantics;
 
-import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,11 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.support.annotation.NonNull;
-
 public class FirebaseUtil {
     public static FirebaseDatabase mFirebaseDatabase;
-    public static DatabaseReference mDatabasereference;
+    public static DatabaseReference mDatabaseReference;
     private static FirebaseUtil firebaseUtil;
     public static FirebaseAuth mFirebaseAuth;
     public static FirebaseStorage mStorage;
@@ -52,9 +50,10 @@ public class FirebaseUtil {
                     else{
                         String userId = firebaseAuth.getUid();
                         checkAdmin(userId);
-                        Toast.makeText(callerActivity.getBaseContext(), "Welcome back", Toast.LENGTH_LONG).show();
+
                     }
 
+                    Toast.makeText(callerActivity.getBaseContext(), "Welcome back", Toast.LENGTH_LONG).show();
 
 
 
@@ -64,7 +63,7 @@ public class FirebaseUtil {
 
         }
         mDeals = new ArrayList<TravelDeal>();
-        mDatabasereference = mFirebaseDatabase.getReference().child(ref);
+        mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
     }
     public static void signIn(){
         // Choose authentication providers
@@ -115,7 +114,7 @@ public class FirebaseUtil {
         ref.addChildEventListener(Listener);
     }
 
-    public static void  attachlistener(){
+    public static void  attachListener(){
         mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
 

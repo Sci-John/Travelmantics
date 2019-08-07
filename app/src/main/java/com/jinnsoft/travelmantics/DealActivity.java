@@ -1,12 +1,13 @@
 package com.jinnsoft.travelmantics;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -43,13 +46,13 @@ public class DealActivity extends AppCompatActivity {
         setContentView(R.layout.activity_deal);
         mFirebaseDatabase =FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference().child("traveldeals");
-        /*FirebaseUtil.openFbReference("traveldeals");
+        //FirebaseUtil.openFbReference("traveldeals");
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
-        mDatabaseReference = FirebaseUtil.mDatabasereference;*/
+        mDatabaseReference = FirebaseUtil.mDatabaseReference;
         txtTitle = (EditText) findViewById(R.id.txtTitle);
         txtDescription = (EditText) findViewById(R.id.txtDescription);
         txtPrice = (EditText) findViewById(R.id.txtPrice);
-        imageView = (ImageView) findViewById(R.id.image);
+        imageView = (ImageView) findViewById(R.id.imageDeal);
         Intent intent = getIntent();
         TravelDeal deal = (TravelDeal) intent.getSerializableExtra("Deal");
         if (deal==null){
@@ -117,17 +120,8 @@ public class DealActivity extends AppCompatActivity {
 
             Uri imageUri = data.getData();
             StorageReference ref = FirebaseUtil.mStorageRef.child(imageUri.getLastPathSegment());
-            ref.putFile(imageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-               @Override
-               public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                   String url = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
-                   String pictureName = taskSnapshot.getStorage().getPath();
-                   deal.setImageUrl(url);
-                   deal.setImageName(pictureName);
-                   Log.d( "Url", url);
-                   Log.d( "Name", pictureName);
-               }
-           });
+            ref.putFile(imageUri);
+
 
         }
     }
